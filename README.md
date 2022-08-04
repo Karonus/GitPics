@@ -26,3 +26,10 @@ Creating image storage from github repository
 
 #### Launch
 `python main.py`
+
+## Upload images
+- Place an images to uploads directory
+- Run program and set operating mode to 1
+
+## Download images
+- Run program and set operating mode to 2
