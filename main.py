@@ -14,7 +14,7 @@ if not os.path.exists(f"uploads"):
 
 if not os.path.exists("config.json"):
     token = input("Enter GitHub API token: ")
-    repository_name = input("Enter repository full name: ")
+    repository_name = input("Enter repository full name (For example: Karonus/GitPics): ")
 
     try:
         Github(token).get_repo(repository_name)
@@ -41,16 +41,13 @@ repository = github.get_repo(repository_name)
 match mode:
     case 1:
         for filename in os.listdir("./uploads"):
-            if not (filename.endswith(".png")):
-                pass
-
             image = ImageCoder(f"./uploads/{filename}")
             b64 = image.convert_image_to_base64().decode("utf-8")
 
-            git_file = f"{datetime.today().strftime('%Y-%m-%d_%H.%M.%S')}/" + f"{filename}"
+            github_filename = f"{datetime.today().strftime('%Y-%m-%d_%H.%M.%S')}/" + f"{filename}"
 
-            repository.create_file(git_file, "Upload from app", b64, branch="master")
-            print(git_file + " CREATED")
+            repository.create_file(github_filename, "Upload from app", b64, branch="master")
+            print(f"{filename} UPLOADED")
     case 2:
         for directory in repository.get_contents("/"):
             if directory.type == "dir":
@@ -60,3 +57,5 @@ match mode:
 
                     image = ImageCoder(f"./downloads/{directory.name}/{file.name}")
                     image.convert_base64_to_image(file.decoded_content)
+
+                    print(f"{directory.name}/{file.name} DOWNLOADED")
